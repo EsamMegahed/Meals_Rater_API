@@ -10,3 +10,4 @@ router.register('rating',RatingViewsets)
 urlpatterns = [
     path('',include(router.urls))
 ]
+
