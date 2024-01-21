@@ -37,9 +37,12 @@ class MealViewsets(viewsets.ModelViewSet):
             
             except:
                 rating = Rating.objects.create(meal=meal,user=user,stars=stars)
-
-
-        return 
+                serializer = RatingSerializer(rating,many=False)
+        else:
+            json = {
+                'message':'stars Not provided'
+            }
+            return Response(json,status=status.HTTP_400_BAD_REQUEST)
         
 
 class RatingViewsets(viewsets.ModelViewSet):
