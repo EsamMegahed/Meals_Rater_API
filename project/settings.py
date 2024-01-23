@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     # Rest Framework
     'rest_framework',
+    'rest_framework.authtoken',
+
 
     # My Apps 
     'home',

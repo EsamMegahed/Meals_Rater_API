@@ -5,6 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Rating,Meal
 from django.contrib.auth.models import User
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny,IsAuthenticated,IsAdminUser,IsAuthenticatedOrReadOnly
 
 # Create your views here.
 
@@ -12,6 +14,8 @@ from django.contrib.auth.models import User
 class MealViewsets(viewsets.ModelViewSet):
     queryset = Meal.objects.all()
     serializer_class = MealSerializer
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [IsAuthenticated,]
 
     @action(detail=True, methods=['post'])
     def rate_meal(self,request,pk=None):
@@ -21,8 +25,9 @@ class MealViewsets(viewsets.ModelViewSet):
             '''
             meal = Meal.objects.get(id=pk)
             stars = request.data['stars']
-            username = request.data['username']
-            user = User.objects.get(username=username)
+            user =request.user
+            #username = request.data['username']
+            #user = User.objects.get(username=username)
 
             try:
                 rating = Rating.objects.get(user=user.id,meal=meal.id)
@@ -48,3 +53,17 @@ class MealViewsets(viewsets.ModelViewSet):
 class RatingViewsets(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
+    def update(self, request, *args, **kwargs):
+        response = {
+            'message':'this not how you should create or update rating'
+        }
+        return Response(response,status=status.HTTP_400_BAD_REQUEST)
+    def create(self, request, *args, **kwargs):
+        response = {
+            'message':'this not how you should create or update rating'
+        }
+        return Response(response,status=status.HTTP_400_BAD_REQUEST)
